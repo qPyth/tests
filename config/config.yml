@@ -1,0 +1,10 @@
+env: "local"
+storage:
+  db_name: "tests"
+  username: "adil"
+  password: "arsenal23"
+http_server:
+  port: "8000"
+  host: "localhost"
+  timeout: 4s
+  idle_timeout: 60s
