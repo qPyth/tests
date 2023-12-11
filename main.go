@@ -34,8 +34,20 @@ func main() {
 	rep := mysql_gorm.NewRepo(db)
 	services := s.NewServices(rep)
 
-	test, _ := services.Test.GetTestBySubjectId(200)
-	fmt.Println(test)
+	test, err := services.Test.GetTestBySubjectId(189)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	fmt.Println(len(test.Questions))
+	for _, q := range test.Questions {
+		if q.Level == 1 {
+			fmt.Printf("questionID: %d\n", q.ID)
+			fmt.Printf("SubID: %d\n", q.SubjectID)
+			fmt.Printf("Level: %d\n", q.Level)
+			fmt.Printf("TotalVars: %d\n", q.CountVariants)
+			fmt.Printf("TotalAnswers: %d\n", q.CountAnswers)
+		}
+	}
 	//starting server
 	address := fmt.Sprintf("%s:%s", cfg.HTTPServer.Host, cfg.HTTPServer.Port)
 

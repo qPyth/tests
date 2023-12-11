@@ -4,7 +4,7 @@ import "errors"
 
 type Question struct {
 	ID            int
-	SubId         int
+	SubjectID     int
 	PartID        int
 	TopicID       int
 	TargetID      int

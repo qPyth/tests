@@ -6,7 +6,7 @@ import (
 )
 
 type Test interface {
-	GetTestBySubjectId(subID int) (models.Test, error)
+	GetTestBySubjectId(subID uint) (models.Test, error)
 }
 
 type Services struct {

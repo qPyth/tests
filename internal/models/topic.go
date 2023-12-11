@@ -10,5 +10,5 @@ type Topic struct {
 }
 
 var (
-	ErrTopicNotFound = errors.New("topic not found")
+	ErrTopicNotFound = errors.New("topic not found for this subject")
 )

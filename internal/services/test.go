@@ -15,14 +15,19 @@ func NewTestService(rep r.Repository) *TestService {
 	}
 }
 
-func (t *TestService) GetTestBySubjectId(subID int) (models.Test, error) {
+func (t *TestService) GetTestBySubjectId(subID uint) (models.Test, error) {
 	var test models.Test
 
 	subject, err := t.rep.GetSubjectById(subID)
+	questions, err := t.rep.GetRandomQuestions(subID)
+	if err != nil {
+		return models.Test{}, err
+	}
 	//TODO handle error
 	if err != nil {
 		return test, err
 	}
 	test.Subject = subject
-	return test, err
+	test.Questions = questions
+	return test, nil
 }
