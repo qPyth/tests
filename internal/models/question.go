@@ -1,8 +1,12 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"gorm.io/gorm"
+)
 
 type Question struct {
+	gorm.Model
 	ID            int
 	SubjectID     int
 	PartID        int

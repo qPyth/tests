@@ -1,8 +1,12 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"gorm.io/gorm"
+)
 
 type Topic struct {
+	gorm.Model
 	ID     int
 	SubID  int
 	PartID int

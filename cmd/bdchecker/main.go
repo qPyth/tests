@@ -53,10 +53,7 @@ type SubInfo struct {
 }
 
 type TopicInfo struct {
-	Title             string
-	TotalCount        int64
-	SingleAnswerCount int64
-	MultiAnswerCount  int64
+	Title string
 }
 
 func getInfoAboutAllEntTests(db *gorm.DB) *EntTestInfo {
@@ -87,20 +84,32 @@ func getInfoAboutAllEntTests(db *gorm.DB) *EntTestInfo {
 		for _, t := range tops {
 			var topInfo TopicInfo
 
-			topInfo.Title = fmt.Sprintf("%s", t.Title)
+			var totalCount int64
+			var single int64
+			var multi int64
+			var context int64
 
-			res := db.Model(&models.Question{}).Where("topic_id=?", t.ID).Count(&topInfo.TotalCount)
+			res := db.Model(&models.Question{}).Where("topic_id=?", t.ID).Count(&totalCount)
 			if res.Error != nil {
 				log.Fatal(res.Error)
 			}
-			res = db.Model(&models.Question{}).Where("topic_id=? and count_variants=?", t.ID, 4).Count(&topInfo.SingleAnswerCount)
+
+			res = db.Model(&models.Question{}).Where("topic_id=? and type=?", t.ID, 0).Count(&single)
 			if res.Error != nil {
 				log.Fatal(res.Error)
 			}
-			res = db.Model(&models.Question{}).Where("topic_id=? and count_variants>?", t.ID, 4).Count(&topInfo.MultiAnswerCount)
+
+			res = db.Model(&models.Question{}).Where("topic_id=? and type=?", t.ID, 1).Count(&multi)
 			if res.Error != nil {
 				log.Fatal(res.Error)
 			}
+
+			res = db.Model(&models.Question{}).Where("topic_id=? and type=?", t.ID, 2).Count(&context)
+			if res.Error != nil {
+				log.Fatal(res.Error)
+			}
+
+			topInfo.Title = fmt.Sprintf("%s (%d-%d-%d-%d)", t.Title, totalCount, single, multi, context)
 			subInfo.TopicsInfo = append(subInfo.TopicsInfo, topInfo)
 		}
 		entTestInfo.SubsInfo = append(entTestInfo.SubsInfo, subInfo)

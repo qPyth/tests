@@ -1,6 +1,6 @@
 package models
 
-type QuestionDetail struct {
+type QuestionDetails struct {
 	ID          int
 	QuestionID  int
 	Explanation string

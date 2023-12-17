@@ -1,8 +1,12 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"gorm.io/gorm"
+)
 
 type Subject struct {
+	gorm.Model
 	Id            int
 	Product       int
 	Title         string

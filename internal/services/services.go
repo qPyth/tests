@@ -1,22 +1,26 @@
 package services
 
 import (
-	"tests/internal/models"
 	r "tests/internal/repository"
 )
 
-type Test interface {
-	GetTestBySubjectId(subID uint) (models.Test, error)
+type EntTest interface {
+	GetTest(mathLitID, kazHistoryID, readingLit, profile1, profile2 int) (EntTestOutput, error)
+	Get(subjectID int)
+}
+
+type EntTestOutput struct {
+	Tests map[string]r.TestOutput
 }
 
 type Services struct {
-	Test
+	EntTest
 }
 
-func NewServices(rep r.Repository) *Services {
-	TestService := NewTestService(rep)
+func NewServices(rep *r.Repository) *Services {
+	TestService := NewEntTestService(rep)
 
 	return &Services{
-		Test: TestService,
+		EntTest: TestService,
 	}
 }
