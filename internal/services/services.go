@@ -6,7 +6,6 @@ import (
 
 type EntTest interface {
 	GetTest(mathLitID, kazHistoryID, readingLit, profile1, profile2 int) (EntTestOutput, error)
-	Get(subjectID int)
 }
 
 type EntTestOutput struct {

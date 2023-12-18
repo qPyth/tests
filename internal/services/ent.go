@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"sync"
 	r "tests/internal/repository"
 )
@@ -16,18 +15,14 @@ func NewEntTestService(rep *r.Repository) *EntTestService {
 	}
 }
 
-func (t *EntTestService) Get(subjectID int) {
-	res := t.rep.Ent.Get(subjectID)
-
-	fmt.Println(res)
-}
-
 func (t *EntTestService) GetTest(mathLitID, kazHistoryID, readingLit, profile1, profile2 int) (EntTestOutput, error) {
-	var output EntTestOutput
+	output := EntTestOutput{
+		Tests: make(map[string]r.TestOutput),
+	}
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	errCh := make(chan error, 4)
-	wg.Add(4)
+	wg.Add(5)
 
 	go t.asyncTestCollect(mathLitID, &wg, &mu, errCh, t.rep.Ent.GetMathLiteracyTest, &output, "mathLiteracy")
 	go t.asyncTestCollect(kazHistoryID, &wg, &mu, errCh, t.rep.Ent.GetKazHistoryTest, &output, "kazHistory")
@@ -44,7 +39,6 @@ func (t *EntTestService) GetTest(mathLitID, kazHistoryID, readingLit, profile1, 
 			return EntTestOutput{}, err
 		}
 	}
-	wg.Wait()
 	return output, nil
 }
 

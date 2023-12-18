@@ -1,7 +1,7 @@
 package models
 
 type QuestionDetails struct {
-	ID          int
+	ID          int `gorm:"primary_key"`
 	QuestionID  int
 	Explanation string
 	Source      string

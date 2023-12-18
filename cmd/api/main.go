@@ -1,10 +1,9 @@
 package main
 
 import (
-	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"log"
 	"log/slog"
-	"os"
 	"tests/internal/config"
 	"tests/internal/repository"
 	"tests/internal/services"
@@ -28,31 +27,16 @@ func main() {
 	rep := repository.NewRepository(db)
 	s := services.NewServices(rep)
 	test, err := s.GetTest(218, 220, 187, 207, 208)
-	if err != nil {
-		log.Fatal(err)
-	}
-	injson, err := json.Marshal(test)
-	if err != nil {
-		log.Fatal(err)
-	}
-	file, err := os.OpenFile("qqq", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	defer file.Close()
-	_, err = file.Write(injson)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	//starting server
-	//address := fmt.Sprintf("%s:%s", cfg.HTTPServer.Host, cfg.HTTPServer.Port)
-	//r := gin.Default()
-	//r.GET("/:name", func(c *gin.Context) {
-	//	name := c.Param("name")
-	//	c.JSON(200, gin.H{
-	//		"Welcome": name,
-	//	})
-	//})
-	//err = r.Run(address)
-	//if err != nil {
-	//	log.Fatalf("server starting error: %s", err.Error())
-	//}
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.GET("test", func(c *gin.Context) {
+		c.JSON(200, test)
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080
+
 }
