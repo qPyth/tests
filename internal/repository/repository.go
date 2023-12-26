@@ -5,15 +5,20 @@ import (
 	"tests/internal/models"
 )
 
-type Ent interface {
-	GetMathLiteracyTest(subjectID int) (TestOutput, error)
-	GetKazHistoryTest(subjectID int) (TestOutput, error)
-	GetReadingLiteracyTest(subjectID int) (TestOutput, error)
-	GetProfileTest(subjectID int) (TestOutput, error)
-}
+const (
+	type0 = iota
+	type1
+	type2
+)
 
-type TestOutput struct {
-	Questions []models.Question `json:"questions"`
+const (
+	level1 = iota + 1
+	level2
+	level3
+)
+
+type Ent interface {
+	GetQuestions(subjectID, count, typeOfQ, level int) ([]models.Question, error)
 }
 
 type Repository struct {

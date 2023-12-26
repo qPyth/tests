@@ -1,14 +1,22 @@
 package main
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"log/slog"
+	"net/http"
 	"tests/internal/config"
+	"tests/internal/models"
 	"tests/internal/repository"
 	"tests/internal/services"
 	"tests/pkg/database"
 )
+
+type ErrorResponse struct {
+	ErrorCode int    `json:"error_code"`
+	Message   string `json:"message"`
+}
 
 func main() {
 	// load config
@@ -26,17 +34,23 @@ func main() {
 	slog.Info("successful connection to database")
 	rep := repository.NewRepository(db)
 	s := services.NewServices(rep)
-	test, err := s.GetTest(218, 220, 187, 207, 208)
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.GET("test", func(c *gin.Context) {
+	r.GET("ent-test", func(c *gin.Context) {
+		test, err := s.GetTest(1200, 220, 187, 199, 194)
+		if err != nil {
+			if errors.Is(err, models.ErrQuestionNotFound) {
+				log.Println(err)
+				c.JSON(400, ErrorResponse{ErrorCode: 400, Message: http.StatusText(400)})
+			}
+			log.Println(err)
+			c.JSON(500, ErrorResponse{ErrorCode: 500, Message: http.StatusText(500)})
+			return
+		}
 		c.JSON(200, test)
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
-
+	err = r.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
 }

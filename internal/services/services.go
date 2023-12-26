@@ -1,6 +1,7 @@
 package services
 
 import (
+	"tests/internal/models"
 	r "tests/internal/repository"
 )
 
@@ -9,7 +10,7 @@ type EntTest interface {
 }
 
 type EntTestOutput struct {
-	Tests map[string]r.TestOutput
+	Tests map[string][]models.Question
 }
 
 type Services struct {

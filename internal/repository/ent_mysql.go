@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"tests/internal/models"
 )
@@ -13,34 +14,17 @@ func NewEntRepo(db *gorm.DB) *EntRepo {
 	return &EntRepo{db}
 }
 
-func (r *EntRepo) GetMathLiteracyTest(subjectID int) (TestOutput, error) {
-	var test TestOutput
+func (e *EntRepo) GetQuestions(subjectID, count, typeOfQ, level int) ([]models.Question, error) {
 	var questions []models.Question
-	r.db.Preload("QuestionDetails").Find(&questions, "subject_id = ?", subjectID).Limit(10)
-	test.Questions = questions
-	return test, nil
-}
-
-func (r *EntRepo) GetKazHistoryTest(subjectID int) (TestOutput, error) {
-	var test TestOutput
-	var questions []models.Question
-	r.db.Preload("QuestionDetails").Find(&questions, "subject_id = ?", subjectID).Limit(20)
-	test.Questions = questions
-	return test, nil
-}
-
-func (r *EntRepo) GetReadingLiteracyTest(subjectID int) (TestOutput, error) {
-	var test TestOutput
-	var questions []models.Question
-	r.db.Preload("QuestionDetails").Find(&questions, "subject_id = ?", subjectID).Limit(10)
-	test.Questions = questions
-	return test, nil
-}
-
-func (r *EntRepo) GetProfileTest(subjectID int) (TestOutput, error) {
-	var test TestOutput
-	var questions []models.Question
-	r.db.Preload("QuestionDetails").Find(&questions, "subject_id = ?", subjectID).Limit(40)
-	test.Questions = questions
-	return test, nil
+	err := e.db.Where("subject_id = ? AND type=? AND level=?", subjectID, typeOfQ, level).
+		Order("RAND()").
+		Preload("QuestionDetails").Limit(count).Find(&questions)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	if len(questions) == 0 {
+		fmt.Println(err)
+		return nil, models.ErrQuestionNotFound
+	}
+	return questions, nil
 }
