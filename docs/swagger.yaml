@@ -1,0 +1,124 @@
+basePath: /api/
+definitions:
+  models.Question:
+    properties:
+      countAnswers:
+        type: integer
+      countVariants:
+        type: integer
+      id:
+        type: integer
+      level:
+        type: integer
+      partID:
+        type: integer
+      questionDetails:
+        items:
+          $ref: '#/definitions/models.QuestionDetails'
+        type: array
+      subjectID:
+        type: integer
+      targetID:
+        type: integer
+      text:
+        type: string
+      topicID:
+        type: integer
+      type:
+        type: integer
+    type: object
+  models.QuestionDetails:
+    properties:
+      answers:
+        type: string
+      explanation:
+        type: string
+      id:
+        type: integer
+      question:
+        type: string
+      questionID:
+        type: integer
+      source:
+        type: string
+      var1:
+        type: string
+      var2:
+        type: string
+      var3:
+        type: string
+      var4:
+        type: string
+      var5:
+        type: string
+      var6:
+        type: string
+      var7:
+        type: string
+      var8:
+        type: string
+      var9:
+        type: string
+      var10:
+        type: string
+    type: object
+  services.EntTestOutput:
+    properties:
+      tests:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/models.Question'
+          type: array
+        type: object
+    type: object
+  transport.ErrorResponse:
+    properties:
+      error_code:
+        type: integer
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a server for getting tests
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "2.0"
+paths:
+  /ent-test:
+    get:
+      consumes:
+      - application/json
+      description: get test by language and profiles subjects`s ids
+      parameters:
+      - description: 'Language of test: ru or kz'
+        in: path
+        name: lang
+        required: true
+        type: string
+      - description: id of first profile subject
+        in: path
+        name: profile1
+        required: true
+        type: integer
+      - description: id of second profile subject
+        in: path
+        name: profile2
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.EntTestOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/transport.ErrorResponse'
+      summary: getting ENT test
+      tags:
+      - ENT test
+swagger: "2.0"

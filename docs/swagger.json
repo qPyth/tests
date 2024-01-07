@@ -1,0 +1,187 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a server for getting tests",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "version": "2.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/",
+    "paths": {
+        "/ent-test": {
+            "get": {
+                "description": "get test by language and profiles subjects`s ids",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ENT test"
+                ],
+                "summary": "getting ENT test",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Language of test: ru or kz",
+                        "name": "lang",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id of first profile subject",
+                        "name": "profile1",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id of second profile subject",
+                        "name": "profile2",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.EntTestOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/transport.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Question": {
+            "type": "object",
+            "properties": {
+                "countAnswers": {
+                    "type": "integer"
+                },
+                "countVariants": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "partID": {
+                    "type": "integer"
+                },
+                "questionDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.QuestionDetails"
+                    }
+                },
+                "subjectID": {
+                    "type": "integer"
+                },
+                "targetID": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "topicID": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.QuestionDetails": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "string"
+                },
+                "explanation": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "questionID": {
+                    "type": "integer"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "var1": {
+                    "type": "string"
+                },
+                "var10": {
+                    "type": "string"
+                },
+                "var2": {
+                    "type": "string"
+                },
+                "var3": {
+                    "type": "string"
+                },
+                "var4": {
+                    "type": "string"
+                },
+                "var5": {
+                    "type": "string"
+                },
+                "var6": {
+                    "type": "string"
+                },
+                "var7": {
+                    "type": "string"
+                },
+                "var8": {
+                    "type": "string"
+                },
+                "var9": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.EntTestOutput": {
+            "type": "object",
+            "properties": {
+                "tests": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/models.Question"
+                        }
+                    }
+                }
+            }
+        },
+        "transport.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error_code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
