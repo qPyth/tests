@@ -28,7 +28,7 @@ type Storage struct {
 func Load() (*Config, error) {
 	cfgPath := os.Getenv("CFG_PATH")
 	if cfgPath == "" {
-		cfgPath = "../../config/config.yml"
+		cfgPath = "./config/config.yml"
 	}
 	var cfg Config
 	if err := cleanenv.ReadConfig(cfgPath, &cfg); err != nil {
